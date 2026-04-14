@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"portfolio-backend/config"
 	"portfolio-backend/routes"
 
@@ -10,10 +11,10 @@ import (
 )
 
 func main() {
-	// Load .env
+	// Load .env (optional)
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("No .env file found (using system env)")
 	}
 
 	// Connect DB
@@ -33,6 +34,12 @@ func main() {
 		})
 	})
 
-	// Run server
-	r.Run(":8080")
+	// PORT FIX (IMPORTANT)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Println("Running on port:", port)
+	r.Run(":" + port)
 }
