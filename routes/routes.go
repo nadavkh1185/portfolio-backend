@@ -15,9 +15,11 @@ func SetupRoutes(r *gin.Engine) {
 
 	api.GET("/profile", controllers.GetProfile)
 	api.GET("/projects", controllers.GetProjects)
+	api.GET("/projects/:id", controllers.GetProjectByID)
 	api.GET("/about", controllers.GetAbout)
 	api.GET("/contact", controllers.GetContact)
 	api.GET("/skills", controllers.GetSkills)
+	api.GET("/skills/:id", controllers.GetSkillByID)
 	api.GET("/experience", controllers.GetExperience)
 
 	// PROTECTED ROUTES
@@ -44,6 +46,5 @@ func SetupRoutes(r *gin.Engine) {
 	auth.PUT("/experience/:id", controllers.UpdateExperience)
 	auth.DELETE("/experience/:id", controllers.DeleteExperience)
 
-	// Image Upload
 	auth.POST("/upload", controllers.UploadImage)
 }
