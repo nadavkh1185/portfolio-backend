@@ -7,58 +7,69 @@ Backend ini digunakan untuk CMS portfolio dengan stack:
 - GORM (ORM)
 - PostgreSQL (Neon)
 
----
+# Backend Structure - Portfolio CMS (Go + Gin + GORM)
 
-## Folder Structure
+    ## Overview
+    Backend ini digunakan untuk CMS portfolio dengan stack:
+    - Go (Golang)
+    - Gin (HTTP framework)
+    - GORM (ORM)
+    - PostgreSQL (Neon)
 
-backend/
-├── main.go # Entry point aplikasi
-├── go.mod
-├── go.sum
-├── .env # Environment variables
+    ## Folder Structure
 
-├── config/
-│ └── db.go # Koneksi database
+    backend/
+    │   .env
+    │   .gitignore
+    │   go.mod
+    │   go.sum
+    │   main.go        # Entry point aplikasi
+    │   STRUCTURE.md
 
-├── models/ # Struct GORM (table schema)
-│ ├── profile.go
-│ ├── about.go
-│ ├── skill.go
-│ ├── project.go
-│ ├── experience.go
-│ └── contact.go
+    ├── config/
+    │   └── db.go     # Koneksi database
 
-├── controllers/ # Logic handler (request/response)
-│ ├── profile_controller.go
-│ ├── project_controller.go
-│ └── ...
+    ├── controllers/  # Logic handler (request/response)
+    │   ├── about_controller.go
+    │   ├── auth_controller.go
+    │   ├── contact_controller.go
+    │   ├── experience_controller.go
+    │   ├── profile_controller.go
+    │   ├── project_controller.go
+    │   ├── skill_controller.go
+    │   └── upload_controller.go
 
-├── routes/
-│ └── routes.go # Routing endpoint
+    ├── middleware/   # Auth / logging (optional)
+    │   └── auth_middleware.go
 
-├── middleware/ # Auth / logging (optional nanti)
-│
-├── utils/ # Helper (optional)
+    ├── models/       # Struct GORM (table schema)
+    │   ├── about.go
+    │   ├── contact.go
+    │   ├── experience.go
+    │   ├── profile.go
+    │   ├── project.go
+    │   ├── skill.go
+    │   └── user.go
 
+    ├── routes/       # Routing endpoint
+    │   └── routes.go
 
----
+    ├── uploads/      # Berkas upload (uploaded files storage)
 
-## Architecture Flow
+    └── utils/        # Helper utilities
+        └── hash.go
 
-Request → Route → Controller → Model → Database
+    ## Architecture Flow
 
----
+    Request → Route → Controller → Model → Database
 
-## Notes
+    ## Notes
 
-- Semua image disimpan sebagai URL (bukan file di DB)
-- Table seperti profile, about, contact = singleton (1 data saja)
-- Gunakan AutoMigrate untuk generate table
-- Jangan over-engineer (tidak pakai repository layer dulu)
+    - Semua image disimpan sebagai URL (bukan file di DB)
+    - Table seperti profile, about, contact = singleton (1 data saja)
+    - Gunakan AutoMigrate untuk generate table
+    - Jangan over-engineer (tidak pakai repository layer dulu)
 
----
-
-## Run Project
-
-```bash
-go run main.go
+    ## Run Project 
+    go run main.go
+    
