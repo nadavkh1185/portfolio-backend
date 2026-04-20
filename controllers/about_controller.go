@@ -21,20 +21,53 @@ func GetAbout(c *gin.Context) {
 
 func UpdateAbout(c *gin.Context) {
 	var about models.About
-	var input models.About
 
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
+	// ambil existing data
 	if err := config.DB.First(&about).Error; err != nil {
-		config.DB.Create(&input)
-		c.JSON(http.StatusOK, input)
-		return
+		about = models.About{}
 	}
 
-	config.DB.Model(&about).Updates(input)
+	// =========================
+	// HANDLE TEXT (FORM VALUE)
+	// =========================
+	subtitle := c.PostForm("subtitle")
+	p1 := c.PostForm("paragraph1")
+	p2 := c.PostForm("paragraph2")
+	p3 := c.PostForm("paragraph3")
+
+	if subtitle != "" {
+		about.Subtitle = subtitle
+	}
+	if p1 != "" {
+		about.Paragraph1 = p1
+	}
+	if p2 != "" {
+		about.Paragraph2 = p2
+	}
+	if p3 != "" {
+		about.Paragraph3 = p3
+	}
+
+	// =========================
+	// HANDLE IMAGE
+	// =========================
+	file, err := c.FormFile("image")
+	if err == nil {
+		path := "uploads/" + file.Filename
+
+		if err := c.SaveUploadedFile(file, path); err == nil {
+			about.ImageURL = path
+		}
+	}
+
+	// =========================
+	// SAVE DB
+	// =========================
+	if about.ID == 0 {
+		config.DB.Create(&about)
+	} else {
+		config.DB.Save(&about)
+	}
 
 	c.JSON(http.StatusOK, about)
 }
