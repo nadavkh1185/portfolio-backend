@@ -26,6 +26,18 @@ func CreateExperience(c *gin.Context) {
 	c.JSON(http.StatusOK, experience)
 }
 
+func GetExperienceByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var experience models.Experience
+	if err := config.DB.First(&experience, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Experience not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, experience)
+}
+
 func UpdateExperience(c *gin.Context) {
 	id := c.Param("id")
 
