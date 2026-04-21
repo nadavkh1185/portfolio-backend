@@ -21,7 +21,7 @@ func SetupRoutes(r *gin.Engine) {
 	api.GET("/skills", controllers.GetSkills)
 	api.GET("/skills/:id", controllers.GetSkillByID)
 	api.GET("/experience", controllers.GetExperience)
-	api.GET("/api/experience/:id", controllers.GetExperienceByID)
+	api.GET("/experience/:id", controllers.GetExperienceByID)
 
 	// PROTECTED ROUTES
 	auth := api.Group("/")
