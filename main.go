@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"portfolio-backend/config"
@@ -26,11 +27,27 @@ func main() {
 	// Init Gin
 	r := gin.Default()
 
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"http://127.0.0.1:3000",
+	}
+
+	if frontendURL := strings.TrimSpace(os.Getenv("FRONTEND_URL")); frontendURL != "" {
+		allowedOrigins = append(allowedOrigins, frontendURL)
+	}
+
+	if extraOrigins := strings.TrimSpace(os.Getenv("FRONTEND_ORIGINS")); extraOrigins != "" {
+		for _, origin := range strings.Split(extraOrigins, ",") {
+			origin = strings.TrimSpace(origin)
+			if origin != "" {
+				allowedOrigins = append(allowedOrigins, origin)
+			}
+		}
+	}
+
 	// CORS FIX (IMPORTANT)
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{
-			"http://localhost:3000", // frontend kamu
-		},
+		AllowOrigins: allowedOrigins,
 		AllowMethods: []string{
 			"GET", "POST", "PUT", "DELETE", "OPTIONS",
 		},

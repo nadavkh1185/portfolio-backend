@@ -18,6 +18,7 @@ func SetupRoutes(r *gin.Engine) {
 	api.GET("/projects/:id", controllers.GetProjectByID)
 	api.GET("/about", controllers.GetAbout)
 	api.GET("/contact", controllers.GetContact)
+	api.POST("/contact/message", controllers.SendContactMessage)
 	api.GET("/skills", controllers.GetSkills)
 	api.GET("/skills/:id", controllers.GetSkillByID)
 	api.GET("/experience", controllers.GetExperience)
